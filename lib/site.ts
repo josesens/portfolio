@@ -4,7 +4,10 @@ export const site = {
   linkedin: "https://www.linkedin.com/in/josepedrokuhnensens/",
   github: "https://github.com/josesens",
   resume: "#",
-  nutrin: { site: "https://nutrin.app.br/", appStore: "#" },
+  nutrin: {
+    site: "https://nutrin.app.br/",
+    appStore: "https://apps.apple.com/br/app/nutrin-para-pacientes/id6794384677",
+  },
   uliweb: "https://uliweb.com.br",
   vivax: "https://vivaxtv.com.br/",
 };

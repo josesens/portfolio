@@ -14,7 +14,7 @@ const archivo = Archivo({
 const themeInit = `try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";if(t==="light")document.documentElement.dataset.theme="light"}catch(e){}`;
 
 export const metadata: Metadata = {
-  title: "José - Full Stack Developer",
+  title: "José Sens - Full Stack Developer",
   description:
     "Full stack developer. Criei o Nutrin, software de nutrição usado por profissionais no Brasil, e publiquei o app dos pacientes na App Store.",
 };

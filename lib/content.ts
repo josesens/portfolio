@@ -26,6 +26,8 @@ type Project = {
 type Content = {
   skip: string;
   talk: string;
+  /** Rótulos do menu de seções: o landmark e os dois estados do botão. */
+  nav: { label: string; open: string; close: string };
   hero: {
     eyebrow: string;
     title: { text: string; strong?: boolean }[];
@@ -50,6 +52,7 @@ export const content: Record<Lang, Content> = {
   pt: {
     skip: "Pular para o conteúdo",
     talk: "Falar comigo",
+    nav: { label: "Seções", open: "Abrir menu", close: "Fechar menu" },
     hero: {
       eyebrow: "Full stack developer",
       title: [{ text: "Ideias" }, { text: "ganham" }, { text: "forma", strong: true }, { text: "com código." }],
@@ -100,12 +103,13 @@ export const content: Record<Lang, Content> = {
       title: ["Vamos", "conversar."],
       text: "Aberto a conversas sobre vagas, projetos e qualquer coisa que envolva produto e código. Me conta o contexto e o prazo.",
       resume: "Currículo",
-      foot: ["José - Full stack developer", "Florianópolis, Brasil"],
+      foot: ["José Sens - Full stack developer", "Florianópolis, Brasil"],
     },
   },
   en: {
     skip: "Skip to content",
     talk: "Get in touch",
+    nav: { label: "Sections", open: "Open menu", close: "Close menu" },
     hero: {
       eyebrow: "Full stack developer",
       title: [{ text: "Ideas" }, { text: "take" }, { text: "shape", strong: true }, { text: "in code." }],
@@ -156,7 +160,7 @@ export const content: Record<Lang, Content> = {
       title: ["Let's", "talk."],
       text: "Open to conversations about roles, projects and anything involving product and code. Tell me the context and the timeline.",
       resume: "Résumé (PDF)",
-      foot: ["José - Full stack developer", "Florianópolis, Brazil"],
+      foot: ["José Sens - Full stack developer", "Florianópolis, Brazil"],
     },
   },
 };

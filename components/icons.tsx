@@ -2,23 +2,20 @@
     projeto. Todos herdam a cor com currentColor e recebem o tamanho de quem
     os usa, então servem tanto ao botão do hero quanto às pílulas da barra. */
 
-/** Marca do LinkedIn em contorno (SVG Repo). A 15px o contorno original fica
-    sub-pixel e lê bem mais claro que o ícone de tema ao lado; o stroke de 1.6
-    (≈0,6px nesse tamanho) engrossa o desenho até o peso dos sinais de 2px, sem
-    mudar a cor — as duas pílulas usam o mesmo --fg-dim. */
+/** Marca do LinkedIn (Simple Icons), só a letra: o quadrado da logo oficial
+    sobraria dentro da pílula, que já é o recipiente. Cheia, como toda logo de
+    terceiro aqui — o contorno anterior era um traçado preenchido e riscado ao
+    mesmo tempo, e a 15px os vãos do "in" fechavam num borrão.
+    O grupo reescala o glifo, que no original ocupa só o miolo do viewBox por
+    causa justamente do quadrado que saiu. */
 export function LinkedInMark() {
   return (
-    <svg
-      viewBox="0 0 40 40"
-      fill="currentColor"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M28.109,34.4c-0.35,0-0.635-0.284-0.635-0.634V24.13c0-3.484-1.788-3.484-2.462-3.484c-1.878,0-2.829,1.172-2.829,3.484 v9.637c0,0.35-0.284,0.634-0.634,0.634H16.1c-0.35,0-0.634-0.284-0.634-0.634V15.41c0-0.35,0.284-0.634,0.634-0.634h5.45 c0.35,0,0.634,0.284,0.634,0.634v0.684l0.328-0.271c1.29-1.067,2.829-1.608,4.574-1.608c2.157,0,3.973,0.689,5.251,1.994 c1.35,1.378,2.063,3.43,2.063,5.933v11.625c0,0.35-0.285,0.634-0.635,0.634H28.109z M25.013,19.376 c1.394,0,3.732,0.618,3.732,4.754v9.002h4.385v-10.99c0-4.231-2.203-6.657-6.044-6.657c-3.43,0-4.916,2.59-4.978,2.7 c-0.112,0.203-0.324,0.329-0.555,0.329c-0.052,0-0.105-0.008-0.159-0.021c-0.282-0.071-0.479-0.322-0.479-0.61v-1.837h-4.18v17.087 h4.18V24.13C20.915,21.153,22.447,19.376,25.013,19.376L25.013,19.376z" />
-      <path d="M6.78,34.4c-0.35,0-0.635-0.284-0.635-0.634V15.41c0-0.35,0.285-0.634,0.635-0.634h5.685c0.35,0,0.634,0.284,0.634,0.634 v18.356c0,0.35-0.284,0.634-0.634,0.634H6.78z M7.415,33.132h4.415V16.045H7.415V33.132z" />
-      <path d="M9.597,13.639c-2.204,0-3.997-1.803-3.997-4.019C5.6,7.403,7.393,5.6,9.597,5.6c2.201,0,3.993,1.804,3.993,4.021 C13.59,11.836,11.798,13.639,9.597,13.639L9.597,13.639z M9.597,6.866c-1.504,0-2.727,1.235-2.727,2.754 c0,1.518,1.223,2.751,2.727,2.751c1.503,0,2.725-1.233,2.725-2.751C12.321,8.102,11.1,6.866,9.597,6.866L9.597,6.866z" />
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <g transform="translate(-1.81 -1.84) scale(1.164)">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286z" />
+        <path d="M7.119 20.452H3.555V9h3.564v11.452z" />
+        <path d="M5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065z" />
+      </g>
     </svg>
   );
 }

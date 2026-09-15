@@ -30,6 +30,9 @@
   --bar-float-w: 960px;
   /* medidas do fim do curso: altura, raio e recuo da pílula flutuante */
   --pill-h: 56px;
+  /* lado dos controles da barra: os quatro botões saem daqui, então
+     nenhum pode divergir dos outros sem alguém mexer neste número */
+  --ctl: 36px;
   --pill-r: 28px;
   --pill-top: 12px;
   --pill-pad-l: clamp(20px, 2vw, 30px);
@@ -63,6 +66,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* a barra é fixa: sem isso todo salto de âncora para o topo da seção,
+     que fica atrás dela. vale para o menu, o CTA do hero e o skip link */
+  scroll-padding-top: calc(var(--bar-h) + 22px);
   color-scheme: var(--scheme);
 }
 body {
@@ -143,6 +149,7 @@ a { color: inherit; }
   background: var(--rule); opacity: calc(1 - var(--p));
 }
 .bar-inner {
+  position: relative;
   display: flex; align-items: center; justify-content: space-between;
   height: calc(var(--bar-h) - (var(--bar-h) - var(--pill-h)) * var(--p));
   padding-left: calc(var(--pad) + (var(--pill-pad-l) - var(--pad)) * var(--p));
@@ -176,10 +183,65 @@ a { color: inherit; }
 }
 
 .mark {
+  /* é a assinatura: o flex pode apertar o resto, não ela — sem isso abaixo de
+     375px a caixa encolhia e "José Sens" quebrava em duas linhas */
+  flex: none; white-space: nowrap;
   font-family: var(--display);
   font-variation-settings: "wdth" 112, "wght" 750;
   font-size: 19px; letter-spacing: -0.02em; text-decoration: none;
 }
+/* ---- seções ---- */
+/* As quatro seções da página. Acima de 900px moram na barra; abaixo disso
+   passam para o painel do botão — a mesma lista, em outra forma. */
+.nav {
+  display: flex; align-items: center; gap: clamp(14px, 1.8vw, 26px);
+  font-family: var(--display); font-size: 13px;
+  font-variation-settings: "wdth" 100, "wght" 600;
+}
+.nav-a {
+  position: relative; padding: 6px 0; text-decoration: none;
+  color: var(--fg-dim); transition: color 0.25s var(--ease);
+}
+.nav-a:hover, .nav-a.on { color: var(--fg); }
+/* um traço só, que muda de lugar (layoutId), em vez de quatro que acendem */
+.nav-mark {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px;
+  border-radius: 2px; background: var(--accent);
+}
+/* as duas barras cruzam como os "+" da grade e abrem em × */
+.nav-btn {
+  display: none; place-items: center; cursor: pointer;
+  width: var(--ctl); height: var(--ctl); padding: 0; color: var(--fg-dim);
+  background: none; border: 1px solid var(--line); border-radius: 999px;
+  transition: color 0.25s, border-color 0.25s;
+}
+.nav-btn:hover { color: var(--fg); border-color: var(--fg); }
+.nav-btn > span {
+  grid-area: 1 / 1; width: 13px; height: 1.5px;
+  border-radius: 2px; background: currentColor;
+}
+.nav-panel {
+  position: absolute; left: 0; right: 0; top: calc(100% + 10px);
+  display: flex; flex-direction: column; padding: 8px;
+  background: var(--bg-lift); border-radius: 18px;
+  box-shadow: inset 0 0 0 1px var(--line), 0 18px 40px -10px var(--shadow);
+}
+.nav-panel a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 14px; border-radius: 12px; text-decoration: none;
+  color: var(--fg-dim); font-family: var(--display); font-size: 15px;
+  font-variation-settings: "wdth" 100, "wght" 600;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-panel a:hover, .nav-panel a.on { color: var(--fg); background: var(--bg); }
+/* o mesmo número que abre a seção lá embaixo, para o painel não ser uma
+   lista solta de palavras */
+.nav-panel i {
+  font-style: normal; font-size: 11px; color: var(--fg-dim);
+  font-variation-settings: "wdth" 100, "wght" 500;
+}
+.nav-panel a.on i { color: var(--accent); }
+
 .bar-right {
   display: flex; align-items: center; gap: 20px;
   font-family: var(--display); font-size: 13px;
@@ -188,7 +250,7 @@ a { color: inherit; }
 .lang {
   font: inherit; cursor: pointer; color: var(--fg-dim);
   display: grid; place-items: center; overflow: hidden;
-  width: 44px; height: 32px;
+  width: var(--ctl); height: var(--ctl);
   background: none; border: 1px solid var(--line); border-radius: 999px;
   transition: color 0.25s, border-color 0.25s, background 0.25s;
 }
@@ -199,17 +261,22 @@ a { color: inherit; }
 .theme, .ico-link {
   font: inherit; cursor: pointer; color: var(--fg-dim); text-decoration: none;
   display: grid; place-items: center; overflow: hidden;
-  width: 32px; height: 32px;
+  width: var(--ctl); height: var(--ctl);
   background: none; border: 1px solid var(--line); border-radius: 999px;
   transition: color 0.25s, border-color 0.25s;
 }
 /* empilhadas na mesma célula: no tema, sol e lua se cruzam ali */
 .theme > svg, .ico-link > svg { grid-area: 1 / 1; width: 15px; height: 15px; }
+/* a logo cheia carrega mais tinta que o contorno do tema ao lado: um ponto
+   a menos acerta o peso óptico entre as duas pílulas */
+.ico-link > svg { width: 14px; height: 14px; }
 .theme:hover, .ico-link:hover { color: var(--fg); border-color: var(--fg); }
 .talk {
-  text-decoration: none; padding: 9px 16px;
+  display: inline-flex; align-items: center;
+  text-decoration: none; height: var(--ctl); padding: 0 18px;
   border: 1px solid var(--line); border-radius: 999px; transition: 0.25s;
 }
+.talk svg { display: none; }
 .talk:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 
 /* ---------------- shared ---------------- */
@@ -307,12 +374,20 @@ h2.big {
   display: grid; grid-template-columns: repeat(9, 1fr); grid-template-rows: repeat(9, 1fr);
   place-items: center;
 }
+/* --g é a energia da célula (0..1), escrita pelo rAF. A cor caminha do traço
+   da grade até o acento em vez de trocar num limiar, e o @property mantém o 0
+   antes do JS. */
+@property --g {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
 .hero-viz span {
-  width: 11px; height: 11px; color: var(--fg-dim); opacity: 0.22;
+  width: 11px; height: 11px; opacity: 0.22;
+  color: color-mix(in oklab, var(--fg-dim), var(--accent) calc(var(--g) * 100%));
   background:
     linear-gradient(currentColor 0 0) center / 100% 1px no-repeat,
     linear-gradient(currentColor 0 0) center / 1px 100% no-repeat;
-  transition: color 0.3s var(--ease);
   will-change: transform, opacity;
 }
 
@@ -421,12 +496,35 @@ h2.big {
   border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--fg-dim);
 }
 
-/* Abaixo disso a barra não comporta as quatro peças sem espremer a assinatura:
+/* Com o botão do menu na barra, o rótulo do CTA é a primeira coisa que não
+   cabe — bem antes de a tela ficar estreita de verdade. Daqui para baixo sobra
+   o envelope, e o nome continua no aria-label do link. */
+@media (max-width: 600px) {
+  .bar-right { gap: 12px; }
+  .talk { width: var(--ctl); padding: 0; justify-content: center; }
+  .talk span { display: none; }
+  .talk svg { display: block; width: 15px; height: 15px; }
+}
+/* Mais estreito ainda não comporta as cinco peças sem espremer a assinatura:
    o LinkedIn sai daqui, porque o mesmo link está no hero e no contato. */
 @media (max-width: 480px) {
   .ico-link { display: none; }
 }
+/* Nos aparelhos mais estreitos os controles cedem os últimos pixels — todos
+   juntos, que é o que os mantém iguais entre si. */
+@media (max-width: 400px) {
+  :root { --ctl: 32px; }
+  .bar-right { gap: 10px; }
+}
+/* Último recurso, abaixo de 360px: some o atalho de e-mail. Aqui o painel do
+   menu já leva a Contato, que é onde o endereço está por extenso. */
+@media (max-width: 359px) {
+  .talk { display: none; }
+}
+/* A lista não cabe mais na barra: troca de forma, não de conteúdo. */
 @media (max-width: 900px) {
+  .nav { display: none; }
+  .nav-btn { display: grid; }
   .hero { grid-template-columns: 1fr; }
   .hero-viz { display: none; }
   .proj { grid-template-columns: 1fr; }
@@ -435,7 +533,6 @@ h2.big {
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-viz span { transition: none; }
   .hero h1 b { animation: none; background-image: none; -webkit-text-fill-color: var(--accent); }
 }
 
