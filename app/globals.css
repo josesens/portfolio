@@ -28,6 +28,12 @@
   --bar-h: 72px;
   --ease: cubic-bezier(0.16, 0.8, 0.24, 1);
   --bar-float-w: 960px;
+  /* medidas do fim do curso: altura, raio e recuo da pílula flutuante */
+  --pill-h: 56px;
+  --pill-r: 28px;
+  --pill-top: 12px;
+  --pill-pad-l: clamp(20px, 2vw, 30px);
+  --pill-pad-r: clamp(14px, 1.6vw, 26px);
   --glass: rgba(27, 27, 25, 0.55);
   --scheme: dark;
   --pad: clamp(20px, 3vw, 44px);
@@ -112,44 +118,63 @@ a { color: inherit; }
 .shell { padding-top: calc(var(--bar-h) + 1px); }
 
 /* ---------------- chrome ---------------- */
+/* --p é o scroll normalizado: 0 com a faixa encaixada na grade, 1 com a
+   pílula solta. A barra não troca de estado — cada propriedade abaixo é uma
+   interpolação desse número, então a transição acompanha o dedo em vez de
+   disparar sozinha num limiar. O valor vem do Header; o @property garante o
+   0 antes do JS e mantém --p tipado como número dentro dos calc(). */
+@property --p {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 /* o vão de 1px faz parte da barra fixa, para a linha e os "+" abaixo
    dela continuarem visíveis enquanto o conteúdo passa por baixo */
 .bar {
   position: fixed; inset: 0 0 auto 0; z-index: 60;
-  background: var(--rule); padding-bottom: 1px;
-  transition: background 0.4s var(--ease), padding 0.4s var(--ease);
+  /* largura da pílula, herdada pelo painel central */
+  --bar-w: calc(var(--content) - (var(--content) - var(--bar-float-w)) * var(--p));
+  padding: calc(var(--pill-top) * var(--p)) 0 calc(1px * (1 - var(--p)));
+}
+/* o fundo da grade atrás da faixa, que some junto com as calhas */
+.bar::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--rule); opacity: calc(1 - var(--p));
 }
 .bar-inner {
   display: flex; align-items: center; justify-content: space-between;
-  height: var(--bar-h); padding: 0 var(--pad);
-  transition: height 0.4s var(--ease), padding 0.4s var(--ease);
+  height: calc(var(--bar-h) - (var(--bar-h) - var(--pill-h)) * var(--p));
+  padding-left: calc(var(--pad) + (var(--pill-pad-l) - var(--pad)) * var(--p));
+  padding-right: calc(var(--pad) + (var(--pill-pad-r) - var(--pad)) * var(--p));
 }
-.bar .side, .bar .row-main {
-  transition:
-    opacity 0.4s var(--ease),
-    border-radius 0.4s var(--ease),
-    background 0.4s var(--ease),
-    box-shadow 0.4s var(--ease),
-    flex-basis 0.4s var(--ease),
-    max-width 0.4s var(--ease);
+/* as calhas desbotam no lugar enquanto o painel central encolhe */
+.bar .side { opacity: calc(1 - var(--p)); }
+.bar .row-main {
+  flex-basis: var(--bar-w); max-width: var(--bar-w);
+  /* os cantos de cima nascem do zero; os de baixo partem do raio da grade */
+  border-radius:
+    calc(var(--pill-r) * var(--p))
+    calc(var(--pill-r) * var(--p))
+    calc(var(--radius) + (var(--pill-r) - var(--radius)) * var(--p))
+    calc(var(--radius) + (var(--pill-r) - var(--radius)) * var(--p));
+  /* o painel opaco da grade vai virando vidro */
+  background: color-mix(in srgb, var(--glass) calc(var(--p) * 100%), var(--bg));
+  position: relative;
+}
+/* aro e sombra só existem soltos: numa camada própria, entram por opacidade
+   em vez de precisarem interpolar cor por cor */
+.bar .row-main::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  border-radius: inherit; opacity: var(--p);
+  box-shadow: inset 0 0 0 1px var(--line), 0 16px 38px -8px var(--shadow);
+}
+/* o vidro só liga depois que a pílula sai do topo: com blur sempre ativo o
+   Safari mantém uma camada extra atrás da barra parada */
+.bar-lift .row-main {
+  backdrop-filter: blur(calc(18px * var(--p))) saturate(calc(1 + 0.6 * var(--p)));
 }
 
-/* rolando: a faixa se desmonta e o painel central vira uma pílula solta */
-.bar-float { background: transparent; padding: 12px 0 0; }
-.bar-float .side { opacity: 0; background: transparent; }
-.bar-float .row-main {
-  flex-basis: var(--bar-float-w); max-width: var(--bar-float-w);
-  border-radius: 999px;
-  background: var(--glass);
-  backdrop-filter: blur(18px) saturate(1.6);
-  box-shadow:
-    0 0 0 1px var(--line) inset,
-    0 14px 34px var(--shadow);
-}
-.bar-float .bar-inner {
-  height: 58px;
-  padding: 0 clamp(14px, 1.6vw, 26px) 0 clamp(20px, 2vw, 30px);
-}
 .mark {
   font-family: var(--display);
   font-variation-settings: "wdth" 112, "wght" 750;
@@ -170,15 +195,17 @@ a { color: inherit; }
 .lang > span { grid-area: 1 / 1; }
 .lang:hover { color: var(--fg); border-color: var(--fg); }
 
-.theme {
-  font: inherit; cursor: pointer; color: var(--fg-dim);
+/* as duas pílulas quadradas da barra: o botão de tema e o link do LinkedIn */
+.theme, .ico-link {
+  font: inherit; cursor: pointer; color: var(--fg-dim); text-decoration: none;
   display: grid; place-items: center; overflow: hidden;
   width: 32px; height: 32px;
   background: none; border: 1px solid var(--line); border-radius: 999px;
   transition: color 0.25s, border-color 0.25s;
 }
-.theme > svg { grid-area: 1 / 1; width: 15px; height: 15px; }
-.theme:hover { color: var(--fg); border-color: var(--fg); }
+/* empilhadas na mesma célula: no tema, sol e lua se cruzam ali */
+.theme > svg, .ico-link > svg { grid-area: 1 / 1; width: 15px; height: 15px; }
+.theme:hover, .ico-link:hover { color: var(--fg); border-color: var(--fg); }
 .talk {
   text-decoration: none; padding: 9px 16px;
   border: 1px solid var(--line); border-radius: 999px; transition: 0.25s;
@@ -206,6 +233,10 @@ h2.big {
   text-decoration: none; padding: 13px 24px; border-radius: 999px;
   transition: 0.25s; border: 1px solid var(--line); display: inline-block;
 }
+/* botão com marca: o rótulo continua sendo o texto; o ícone só acompanha,
+   herda a cor do botão e não encolhe quando a linha aperta */
+.btn-ico { display: inline-flex; align-items: center; gap: 9px; }
+.btn-ico svg { width: 15px; height: 15px; flex: none; }
 .btn-solid { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 .btn-solid:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .btn-ghost:hover { border-color: var(--fg); }
@@ -390,6 +421,11 @@ h2.big {
   border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--fg-dim);
 }
 
+/* Abaixo disso a barra não comporta as quatro peças sem espremer a assinatura:
+   o LinkedIn sai daqui, porque o mesmo link está no hero e no contato. */
+@media (max-width: 480px) {
+  .ico-link { display: none; }
+}
 @media (max-width: 900px) {
   .hero { grid-template-columns: 1fr; }
   .hero-viz { display: none; }
@@ -399,7 +435,7 @@ h2.big {
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .bar, .bar-inner, .bar .side, .bar .row-main { transition: none; }
   .hero-viz span { transition: none; }
   .hero h1 b { animation: none; background-image: none; -webkit-text-fill-color: var(--accent); }
 }
+

@@ -1,12 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionStyle,
+} from "motion/react";
 import { useLang } from "./lang";
 import { site } from "@/lib/site";
 import type { Lang } from "@/lib/content";
 import { Row } from "./Row";
 import { ThemeToggle } from "./ThemeToggle";
+import { LinkedInMark } from "./icons";
 
 /** Rótulo do botão de idioma: descreve para onde ele leva. */
 const switchTo: Record<Lang, string> = {
@@ -14,23 +24,35 @@ const switchTo: Record<Lang, string> = {
   en: "Ver em português",
 };
 
+/** Trecho de scroll em que a faixa se desmonta e vira pílula. */
+const lift: [number, number] = [12, 132];
+
 export function Header() {
   const { lang, setLang, t } = useLang();
   const next: Lang = lang === "pt" ? "en" : "pt";
-  /** Fora do topo, a faixa da grade vira uma pílula flutuante. */
-  const [floating, setFloating] = useState(false);
+  const reduce = useReducedMotion();
 
-  useEffect(() => {
-    const onScroll = () => setFloating(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  /* A barra não tem dois estados: --p vai de 0 (faixa encaixada na grade) a 1
+     (pílula solta) junto com o scroll, e o CSS interpola largura, altura, raio,
+     fundo e sombra a partir desse mesmo número — nada "pula" num limiar. */
+  const { scrollY } = useScroll();
+  const raw = useTransform(scrollY, lift, [0, 1], { clamp: true });
+  /* mola leve: tira o tranco da roda do mouse sem atrasar o dedo no trackpad */
+  const damped = useSpring(raw, { stiffness: 320, damping: 42, mass: 0.6 });
+  /* a mola pode passar do fim do curso; o CSS precisa de 0–1 fechado */
+  const p = useTransform(reduce ? raw : damped, (v) => Math.min(1, Math.max(0, v)));
+
+  /* o blur do vidro só entra depois que a pílula começa a se soltar */
+  const [lifted, setLifted] = useState(false);
+  useMotionValueEvent(p, "change", (v) => setLifted(v > 0.01));
 
   return (
     <>
       <a className="skip" href="#conteudo">{t.skip}</a>
-      <header className={floating ? "bar bar-float" : "bar"}>
+      <motion.header
+        className={lifted ? "bar bar-lift" : "bar"}
+        style={{ "--p": p } as unknown as MotionStyle}
+      >
         <Row hatch top>
           <div className="bar-inner">
             <a className="mark" href="#inicio">José Sens</a>
@@ -55,11 +77,22 @@ export function Header() {
                 </AnimatePresence>
               </button>
               <ThemeToggle />
+              {/* só ícone: o nome acessível vem do aria-label */}
+              <a
+                className="ico-link"
+                href={site.linkedin}
+                target="_blank"
+                rel="noopener"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+              >
+                <LinkedInMark />
+              </a>
               <a className="talk" href={`mailto:${site.email}`}>{t.talk}</a>
             </div>
           </div>
         </Row>
-      </header>
+      </motion.header>
     </>
   );
 }

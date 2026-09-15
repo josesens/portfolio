@@ -55,7 +55,7 @@ export const content: Record<Lang, Content> = {
       title: [{ text: "Ideias" }, { text: "ganham" }, { text: "forma", strong: true }, { text: "com código." }],
       text: "Eu sou José, desenvolvedor full stack. Desenvolvo\nsoluções eficientes que resolvem problemas reais.",
       ctaWork: "Ver o trabalho",
-      ctaResume: "Currículo (PDF)",
+      ctaResume: "Currículo",
     },
     work: {
       title: "Trabalhos selecionados",
@@ -99,7 +99,7 @@ export const content: Record<Lang, Content> = {
     contact: {
       title: ["Vamos", "conversar."],
       text: "Aberto a conversas sobre vagas, projetos e qualquer coisa que envolva produto e código. Me conta o contexto e o prazo.",
-      resume: "Currículo (PDF)",
+      resume: "Currículo",
       foot: ["José - Full stack developer", "Florianópolis, Brasil"],
     },
   },
@@ -111,7 +111,7 @@ export const content: Record<Lang, Content> = {
       title: [{ text: "Ideas" }, { text: "take" }, { text: "shape", strong: true }, { text: "in code." }],
       text: "I build efficient web solutions that solve real problems for your business. From idea to live product, with you at every stage.",
       ctaWork: "See the work",
-      ctaResume: "Résumé (PDF)",
+      ctaResume: "Résumé",
     },
     work: {
       title: "Selected work",

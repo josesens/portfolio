@@ -5,6 +5,7 @@ import { useLang } from "./lang";
 import { site } from "@/lib/site";
 import { Parallax, rise, stagger } from "./motion";
 import { HeroViz } from "./HeroViz";
+import { DownloadMark } from "./icons";
 
 export function Hero() {
   const { t } = useLang();
@@ -26,7 +27,10 @@ export function Hero() {
         <motion.p variants={rise}>{h.text}</motion.p>
         <motion.div className="hero-cta" variants={rise}>
           <a className="btn btn-solid" href="#trabalho">{h.ctaWork}</a>
-          <a className="btn btn-ghost" href={site.resume}>{h.ctaResume}</a>
+          <a className="btn btn-ghost btn-ico" href={site.resume}>
+            <DownloadMark />
+            {h.ctaResume}
+          </a>
         </motion.div>
       </motion.div>
 
