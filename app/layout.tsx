@@ -10,8 +10,10 @@ const archivo = Archivo({
   style: ["normal", "italic"],
 });
 
-/** Aplica o tema antes da primeira pintura, para não piscar. */
-const themeInit = `try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";if(t==="light")document.documentElement.dataset.theme="light"}catch(e){}`;
+/** Aplica o tema antes da primeira pintura, para não piscar. O claro é o
+    padrão e já está no :root, então só quem escolheu o escuro marca o
+    atributo — sem escolha salva, o site abre claro. */
+const themeInit = `try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`;
 
 export const metadata: Metadata = {
   title: "José Sens - Full Stack Developer",

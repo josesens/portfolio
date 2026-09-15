@@ -1,21 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #131312;
-  --bg-lift: #1b1b19;
-  --line: rgba(237, 233, 227, 0.14);
-  --fg: #ede9e3;
-  --fg-dim: #9c968c;
-  --accent: #7d94ff;
-  --accent-deep: #2b43e8;
+  --bg: #e7e1dc;
+  --bg-lift: #efebe7;
+  --line: rgba(19, 19, 18, 0.16);
+  --fg: #171613;
+  --fg-dim: #6b665c;
+  --accent: #2b43e8;
+  --accent-deep: #1b2ba6;
 
-  --hatch: rgba(237, 233, 227, 0.07);
+  --hatch: rgba(19, 19, 18, 0.09);
   /* cor que aparece pelos vãos de 1px entre os painéis */
-  --rule: #2a2927;
-  --shimmer: #e8ecff;
-  --on-accent: #0b0f2a;
-  --glow: rgba(43, 67, 232, 0.22);
-  --shadow: rgba(0, 0, 0, 0.42);
+  --rule: #cdc4bb;
+  --shimmer: #9db0ff;
+  --on-accent: #ffffff;
+  /* sem o halo azul do hero no claro: ele só some no fundo bege */
+  --glow: transparent;
+  --shadow: rgba(19, 19, 18, 0.16);
 
   --display: var(--font-archivo), system-ui, sans-serif;
   /* corpo e títulos na mesma família */
@@ -37,30 +38,31 @@
   --pill-top: 12px;
   --pill-pad-l: clamp(20px, 2vw, 30px);
   --pill-pad-r: clamp(14px, 1.6vw, 26px);
-  --glass: rgba(27, 27, 25, 0.55);
-  --scheme: dark;
+  --glass: rgba(231, 225, 220, 0.66);
+  --scheme: light;
   --pad: clamp(20px, 3vw, 44px);
 }
 
-/* tema claro: mesma estrutura, só os tokens mudam */
-:root[data-theme="light"] {
-  --bg: #e7e1dc;
-  --bg-lift: #efebe7;
-  --line: rgba(19, 19, 18, 0.16);
-  --fg: #171613;
-  --fg-dim: #6b665c;
-  --accent: #2b43e8;
-  --accent-deep: #1b2ba6;
+/* tema escuro: mesma estrutura, só os tokens mudam. O claro é o padrão e
+   mora no :root acima, então o site abre claro mesmo sem o JS rodar. */
+:root[data-theme="dark"] {
+  --bg: #131312;
+  --bg-lift: #1b1b19;
+  --line: rgba(237, 233, 227, 0.14);
+  --fg: #ede9e3;
+  --fg-dim: #9c968c;
+  --accent: #7d94ff;
+  --accent-deep: #2b43e8;
 
-  --hatch: rgba(19, 19, 18, 0.09);
-  --rule: #cdc4bb;
-  --shimmer: #9db0ff;
-  --on-accent: #ffffff;
-  /* sem o halo azul do hero no claro: só some no fundo bege */
-  --glow: transparent;
-  --shadow: rgba(19, 19, 18, 0.16);
-  --glass: rgba(231, 225, 220, 0.66);
-  --scheme: light;
+  --hatch: rgba(237, 233, 227, 0.07);
+  --rule: #2a2927;
+  --shimmer: #e8ecff;
+  --on-accent: #0b0f2a;
+  /* o halo azul do hero existe só aqui: no bege ele não aparece */
+  --glow: rgba(43, 67, 232, 0.22);
+  --shadow: rgba(0, 0, 0, 0.42);
+  --glass: rgba(27, 27, 25, 0.55);
+  --scheme: dark;
 }
 
 html {
@@ -413,17 +415,17 @@ h2.big {
   font-size: 13px; line-height: 1; color: var(--fg-dim);
   margin-top: 2px; user-select: none;
 }
-/* No escuro vale a versão monocromática da marca (a mesma das artes em
-   branco); no claro volta o verde, escurecido porque o tom original rende
-   só 2:1 contra o bege, abaixo do mínimo de 3:1 para elemento gráfico. */
-.proj-logo[data-brand="nutrin"] { background: #ffffff; }
-:root[data-theme="light"] .proj-logo[data-brand="nutrin"] { background: #148f79; }
-/* Mesma ideia: cinza claro da marca d'água no escuro, azul no claro. */
-.proj-logo[data-brand="uliweb"] { background: #ececec; }
-:root[data-theme="light"] .proj-logo[data-brand="uliweb"] { background: #223a57; }
+/* No claro vale o verde da marca, escurecido porque o tom original rende só
+   2:1 contra o bege, abaixo do mínimo de 3:1 para elemento gráfico; no escuro
+   entra a versão monocromática, a mesma das artes em branco. */
+.proj-logo[data-brand="nutrin"] { background: #148f79; }
+:root[data-theme="dark"] .proj-logo[data-brand="nutrin"] { background: #ffffff; }
+/* Mesma ideia: azul no claro, cinza claro da marca d'água no escuro. */
+.proj-logo[data-brand="uliweb"] { background: #223a57; }
+:root[data-theme="dark"] .proj-logo[data-brand="uliweb"] { background: #ececec; }
 /* Azul da marca no claro; branco no escuro, como as outras duas. */
-.proj-logo[data-brand="vivax"] { background: #ffffff; }
-:root[data-theme="light"] .proj-logo[data-brand="vivax"] { background: #313b96; }
+.proj-logo[data-brand="vivax"] { background: #313b96; }
+:root[data-theme="dark"] .proj-logo[data-brand="vivax"] { background: #ffffff; }
 .proj-name {
   margin: 0; font-family: var(--display);
   font-variation-settings: "wdth" 110, "wght" 750;

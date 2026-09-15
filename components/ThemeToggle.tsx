@@ -11,18 +11,19 @@ const label: Record<Theme, string> = {
 };
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   // O tema já foi aplicado no <html> antes da hidratação; aqui só o lemos.
   useEffect(() => {
-    const current = document.documentElement.dataset.theme;
-    if (current === "light") setTheme("light");
+    if (document.documentElement.dataset.theme === "dark") setTheme("dark");
   }, []);
 
   const toggle = () => {
     const next: Theme = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    document.documentElement.dataset.theme = next;
+    // o claro não marca atributo, igual ao que o themeInit faz no carregamento
+    if (next === "dark") document.documentElement.dataset.theme = "dark";
+    else delete document.documentElement.dataset.theme;
     try {
       localStorage.setItem("theme", next);
     } catch {
