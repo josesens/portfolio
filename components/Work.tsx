@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "./lang";
-import { Parallax, Reveal } from "./motion";
+import { Reveal } from "./motion";
 import { sections } from "@/lib/content";
 
 export function Work() {
@@ -20,18 +20,43 @@ export function Work() {
         <article className="proj" key={p.name}>
           <div className="proj-pin">
             <Reveal>
-              <div className="proj-num">{p.num}</div>
-              <h3 className="proj-name">{p.name}</h3>
-              <p className="proj-one">{p.one}</p>
-              {p.tags.length > 0 && (
-                <div className="tags">
-                  {p.tags.map((tag) => <span key={tag}>{tag}</span>)}
+              {p.logo && (
+                <div className="proj-mark">
+                  <div
+                    className="proj-logo"
+                    data-brand={p.logo.brand}
+                    aria-hidden="true"
+                    style={{
+                      // Inline não passa pelo Lightning CSS, então o prefixo
+                      // do Safari precisa vir escrito à mão.
+                      WebkitMaskImage: `url(${p.logo.src})`,
+                      maskImage: `url(${p.logo.src})`,
+                      aspectRatio: p.logo.ratio,
+                    }}
+                  />
+                  {/* O ® não cabe na máscara (o PNG é só recorte), então vem
+                      como texto sobrescrito, do jeito que a marca se escreve. */}
+                  {p.registered && <span className="proj-r">®</span>}
                 </div>
               )}
+              {/* Com logo, o nome fica só para leitor de tela e SEO:
+                  a arte já escreve a palavra. */}
+              <h3 className={p.logo ? "proj-name sr-only" : "proj-name"}>
+                {p.name}
+              </h3>
+              <p className="proj-one">{p.one}</p>
               {p.links && (
                 <div className="proj-links">
                   {p.links.map((l) => (
-                    <a className="btn btn-ghost" href={l.href} key={l.label}>{l.label}</a>
+                    <a
+                      className="btn btn-ghost"
+                      href={l.href}
+                      key={l.label}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      {l.label}
+                    </a>
                   ))}
                 </div>
               )}
@@ -40,24 +65,8 @@ export function Work() {
 
           <div className="proj-body">
             <Reveal>
-              <p className="lead">{p.lead}</p>
               {p.body && <p>{p.body}</p>}
             </Reveal>
-            {p.shot && (
-              <Parallax speed={0.04} className="shot-wrap">
-                <div className="shot">{p.shot}</div>
-              </Parallax>
-            )}
-            {p.bullets && (
-              <ul className="bullets">
-                {p.bullets.map((b, i) => (
-                  <Reveal as="li" key={b} delay={i * 0.06}>
-                    <em>{String(i + 1).padStart(2, "0")}</em>
-                    <span>{b}</span>
-                  </Reveal>
-                ))}
-              </ul>
-            )}
           </div>
         </article>
       ))}

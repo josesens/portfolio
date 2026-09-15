@@ -10,8 +10,8 @@ export function Background() {
     <section className="sec wrap" id="trajetoria">
       <Reveal>
         <div className="eyebrow">
-          <b>04</b>
-          <span>{sections[3].label[lang]}</span>
+          <b>03</b>
+          <span>{sections[2].label[lang]}</span>
         </div>
         <h2 className="big">{t.cv.title}</h2>
       </Reveal>
@@ -21,6 +21,11 @@ export function Background() {
             <span className="cv-when">{item.when}</span>
             <span className="cv-what">{item.what}</span>
             <span className="cv-note">{item.note}</span>
+            <span className="cv-tech">
+              {item.tech?.map((tag) => (
+                <span key={tag}>{tag}</span>
+              ))}
+            </span>
           </Reveal>
         ))}
       </ul>

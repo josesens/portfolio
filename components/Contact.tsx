@@ -12,8 +12,8 @@ export function Contact() {
     <section className="sec wrap end" id="contato">
       <Reveal>
         <div className="eyebrow">
-          <b>05</b>
-          <span>{sections[4].label[lang]}</span>
+          <b>04</b>
+          <span>{sections[3].label[lang]}</span>
         </div>
         <h2>
           {c.title[0]}
@@ -30,7 +30,9 @@ export function Contact() {
       </Reveal>
       <div className="foot">
         <span>{c.foot[0]}</span>
-        <span>{c.foot[1]}</span>
+        <span suppressHydrationWarning>
+          {c.foot[1]} · {new Date().getFullYear()}
+        </span>
       </div>
     </section>
   );
