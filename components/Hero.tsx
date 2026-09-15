@@ -8,7 +8,7 @@ import { HeroViz } from "./HeroViz";
 import { DownloadMark } from "./icons";
 
 export function Hero() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const h = t.hero;
   return (
     <section className="hero wrap" id="inicio">
@@ -27,7 +27,13 @@ export function Hero() {
         <motion.p variants={rise}>{h.text}</motion.p>
         <motion.div className="hero-cta" variants={rise}>
           <a className="btn btn-solid" href="#trabalho">{h.ctaWork}</a>
-          <a className="btn btn-ghost btn-ico" href={site.resume}>
+          {/* abre em aba nova: quem for ler o PDF não perde o site */}
+          <a
+            className="btn btn-ghost btn-ico"
+            href={site.resume[lang]}
+            target="_blank"
+            rel="noopener"
+          >
             <DownloadMark />
             {h.ctaResume}
           </a>

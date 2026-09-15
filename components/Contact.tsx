@@ -46,7 +46,12 @@ export function Contact() {
           <GitHubMark />
           GitHub
         </a>
-        <a className="btn btn-ghost btn-ico" href={site.resume}>
+        <a
+          className="btn btn-ghost btn-ico"
+          href={site.resume[lang]}
+          target="_blank"
+          rel="noopener"
+        >
           <DownloadMark />
           {c.resume}
         </a>
